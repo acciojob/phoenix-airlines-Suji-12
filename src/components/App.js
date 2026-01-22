@@ -13,6 +13,10 @@ const flights = [
   }
 ];
 
+const Header = () => (
+  <div className="header">Flight Booking App</div>
+);
+
 const Home = () => {
   const navigate = useNavigate();
   return (
@@ -35,6 +39,7 @@ const FlightSearch = () => {
         <div key={f.id}>
           <p>{f.airline} ({f.flightNo})</p>
           <p>{f.source} → {f.destination}</p>
+
           <button
             className="book-flight"
             onClick={() => navigate("/flight-booking")}
@@ -49,22 +54,43 @@ const FlightSearch = () => {
 
 const FlightBooking = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
+  const [form, setForm] = useState({
+    first: "",
+    last: "",
+    email: "",
+    phone: ""
+  });
+
+  const submit = () => {
+    if (
+      !form.first ||
+      !form.last ||
+      !form.email ||
+      !form.phone
+    ) {
+      alert("Invalid input");
+      return;
+    }
+    navigate("/confirmation");
+  };
 
   return (
     <div>
-      <input type="text" placeholder="First Name"
-        onChange={(e) => setUser({ ...user, first: e.target.value })} />
-      <input type="text" placeholder="Last Name"
-        onChange={(e) => setUser({ ...user, last: e.target.value })} />
-      <input type="text" placeholder="Email"
-        onChange={(e) => setUser({ ...user, email: e.target.value })} />
-      <input type="text" placeholder="Mobile"
-        onChange={(e) => setUser({ ...user, phone: e.target.value })} />
+      <h3>Booking Confirmation for Flight Air India (AI-275)</h3>
 
-      <button onClick={() => navigate("/confirmation")}>
-        CONFIRM BOOKING
-      </button>
+      <input type="text" placeholder="First Name"
+        onChange={(e) => setForm({ ...form, first: e.target.value })} />
+
+      <input type="text" placeholder="Last Name"
+        onChange={(e) => setForm({ ...form, last: e.target.value })} />
+
+      <input type="text" placeholder="Email ID"
+        onChange={(e) => setForm({ ...form, email: e.target.value })} />
+
+      <input type="text" placeholder="Mobile Number"
+        onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+
+      <button onClick={submit}>CONFIRM BOOKING</button>
     </div>
   );
 };
@@ -85,8 +111,7 @@ const App = () => {
       {/* Do not remove the main div */}
 
       <BrowserRouter>
-        <div className="header">Flight Booking App</div>
-
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/flight-search" element={<FlightSearch />} />
